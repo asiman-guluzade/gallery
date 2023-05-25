@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  {% load static %}
   <title>Art Gallery</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 <body>
   <header>
@@ -55,5 +56,5 @@
   <footer>
     <p>&copy; 2023 Art Gallery. All rights reserved.</p>
   </footer>
-  <script src="script.js"></script>
+  <script src="{% static 'js/script.js' %}"></script>
 </body>
