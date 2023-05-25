@@ -7,4 +7,4 @@ urlpatterns = [
     path('photo/<str:pk>', PhotoView.as_view(), name="photo"),
 
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
