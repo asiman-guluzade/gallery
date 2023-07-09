@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" 
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+
+    body {
+      background-color: #b7cceb;
+      background-size: cover;
+      background-position: center;
+      padding-top: 10px;
+    }
+
+    .image-thumbnail {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+        /* Modified code for categories */
+        .card-header {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .list-group-item {
+      background-color: #333;
+      color: #fff;
+      border: none;
+    }
+    /* End of modified code */
+    
+      /* Modified code for categories */
+      .card {
+      margin-left: 0;
+      border: none;
+    }
+
+    .card-header {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .list-group-item {
+      background-color: #333;
+      color: #000;
+      border: none;
+    }
+
+    .list-group-item a {
+      color: #000;
+      text-decoration: none;
+    }
+    /* End of modified code */
+
+    /* Header Area */
+    /* Modified code for navbar */
+
+    .navbar {
+    position: top;
+    top: 20;
+    right: 0;
+    left: 50%;
+    width: 40%;
+    background-color: transparent !important;
+    padding: 20px;
+  }
+
+  .navbar-nav .nav-item {
+    color: green !important;
+    margin-left: 30px;
+  }
+  .nav-link {
+    color: green; /* Replace with your desired color */
+  }
+  .bg-custom {
+    background-color: white; /* Replace with your desired color */
+  }
+    /* End of modified code */
+
+    /* Hover Effect */
+    .hover-effect img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .hover-effect img {
+      transition: transform 0.3s ease;
+    }
+
+    .hover-effect::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .hover-effect:hover img {
+      transform: scale(1.1);
+      filter: brightness(80%);
+    }
+
+    .hover-effect:hover::before {
+      opacity: 1;
+    }
+
+    .image-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #FFFFFF;
+      font-family: "Roboto", sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .hover-effect:hover .image-title {
+      opacity: 1;
+    }
+
+    /* Fullscreen Image Modal */
+    .modal-image {
+    max-width: 70vw; /* Set maximum width to 70% of the viewport width */
+    max-height: auto; /* Set maximum height to 70% of the viewport height */
+    background-color: #5875b9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 2px;
+  }
+    .modal-content {
+    background-color: transparent; /* Updated: Set background color to transparent */
+    box-shadow: none; /* Updated: Remove box shadow */
+    border: none; /* Remove border */
+
+    
+  }
+
+  </style>
+
+
+</head>
+
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-custom">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link" href="{% url 'gallery' %}">Gallery</a>
+          <a class="nav-item nav-link" href="#">Contact</a>
+          <a class="nav-item nav-link" href="{% url 'about' %}">About</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Categories
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="{% url 'gallery' %}">All</a>
+              {% for category in categories %}
+                <a class="dropdown-item" href="{% url 'gallery' %}?category={{category.name}}">
+                  {{category.name}}
+                </a>
+              {% endfor %}
+            </div>
+          </li>
+        </div>
+      </div>
+    </nav>
+    
+</header>
+<body class="m-5">
+
+
+  <div class="container mt-4"> 
+    <div class="row">
+  
+      <div class="col-md-9"> 
+        <div class="row">
+          {% for photo in photos %}
+          <div class="col-md-4 mb-4">
+            <div class="card hover-effect">
+              <a href="#" data-toggle="modal" data-target="#imageModal{{ photo.id }}" data-photoid="{{ photo.id }}">
+                <div class="image-frame">
+                  <img class="image-thumbnail" src="{{ photo.image.url }}" alt="{{ photo.title }}">
+                  <div class="image-title">{{ photo.title }}</div>
+                </div>
+              </a>
+            </div>
+          </div>
+           <!-- Modal Dialog for Fullscreen Image -->
+           <div class="modal fade" id="imageModal{{ photo.id }}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel{{ photo.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="modal-controls">
+                    <button class="btn prev-btn"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                    <img class="modal-image" src="{{ photo.image.url }}" alt="{{ photo.title }}">
+                    <button class="btn next-btn"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <h3>No photos...</h3>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384- 
+  OS+bSzCDbjlK+6MvjDxnAq4m7N2vAf3IjD/wkh4Uyohe6k2WhEWr+eJoDjr1Ur4B" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
